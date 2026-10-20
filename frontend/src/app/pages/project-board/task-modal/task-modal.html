@@ -1,0 +1,70 @@
+<div class="modal-backdrop" (click)="close()"></div>
+<div class="modal d-block" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ existingTask() ? 'Modifier la tâche' : 'Nouvelle tâche' }}</h5>
+                <button type="button" class="btn-close" (click)="close()"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label class="form-label">Nom</label>
+                        <input type="text" class="form-control" name="name" [(ngModel)]="task.name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        <textarea class="form-control" name="description" [(ngModel)]="task.description"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Date d'échéance</label>
+                        <input type="date" class="form-control" name="dueDate" [(ngModel)]="task.dueDate">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Priorité</label>
+                        <select class="form-select" name="priority" [(ngModel)]="task.priority">
+                            <option value="LOW">Basse</option>
+                            <option value="MEDIUM">Moyenne</option>
+                            <option value="HIGH">Haute</option>
+                        </select>
+                    </div>
+                    @if (members().length > 0) {
+                    <div class="mb-3">
+                        <label class="form-label">Assignés</label>
+                        @for (member of members(); track member.id) {
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox"
+                                   [id]="'member-' + member.id"
+                                   [checked]="isAssigned(member.id)"
+                                   (change)="toggleAssignee(member)">
+                            <label class="form-check-label" [for]="'member-' + member.id">
+                                {{ member.username }}
+                            </label>
+                        </div>
+                        }
+                    </div>
+                    }
+                    @if (history().length > 0) {
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Historique des modifications</label>
+                        <ul class="list-group list-group-flush">
+                            @for (entry of history(); track entry.id) {
+                            <li class="list-group-item px-0 py-1 small">
+                                <span class="text-muted">{{ entry.changedAt | date:'dd/MM/yyyy HH:mm' }}</span>
+                                — <strong>{{ entry.field }}</strong> :
+                                <span class="text-danger">{{ entry.oldValue ?? '—' }}</span>
+                                → <span class="text-success">{{ entry.newValue ?? '—' }}</span>
+                            </li>
+                            }
+                        </ul>
+                    </div>
+                    }
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" (click)="close()">Annuler</button>
+                        <button type="button" class="btn btn-primary" (click)="onSubmit()">{{ existingTask() ? 'Enregistrer' : 'Créer' }}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

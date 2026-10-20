@@ -1,0 +1,47 @@
+<div class="container-fluid mt-4">
+   <div class="row mb-3">
+     <div class="col-12 d-flex align-items-start gap-3 flex-wrap">
+       <button (click)="openCreateModal()" class="btn btn-primary">Créer une tâche</button>
+       <form class="d-flex gap-2 align-items-center flex-wrap" (ngSubmit)="inviteMember()">
+         <input type="email" class="form-control" style="width:220px" placeholder="Email du membre"
+                [(ngModel)]="inviteEmail" name="inviteEmail" required>
+         <select class="form-select" style="width:150px" [(ngModel)]="inviteRole" name="inviteRole">
+           <option value="MEMBER">Membre</option>
+           <option value="ADMIN">Administrateur</option>
+           <option value="OBSERVER">Observateur</option>
+         </select>
+         <button type="submit" class="btn btn-outline-primary">Inviter</button>
+         @if (inviteMessage()) {
+           <span class="small" [class.text-success]="!inviteError()" [class.text-danger]="inviteError()">
+             {{ inviteMessage() }}
+           </span>
+         }
+       </form>
+       @if(showTaskModal()) {
+         <app-task-modal
+           [projectId]="projectId"
+           [existingTask]="selectedTask()"
+           [members]="members()"
+           (closed)="closeModal()"
+           (taskCreated)="loadTasks()">
+         </app-task-modal>
+       }
+     </div>
+   </div>
+   <div class="row">
+     @for(status of statuses; track status) {
+       <div class="col-md-4">
+         <div class="card">
+           <div class="card-header">{{ status }}</div>
+           <div class="card-body">
+             @for(task of getTasksByStatus(status); track task.id) {
+               <div class="card mb-2" style="cursor:pointer" (click)="openEditModal(task)">
+                 <div class="card-body">{{ task.name }}</div>
+               </div>
+             }
+           </div>
+         </div>
+       </div>
+     }
+   </div>
+</div>

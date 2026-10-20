@@ -1,0 +1,51 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Mes projets</h2>
+    <button class="btn btn-primary" (click)="openCreateModal()">Nouveau projet</button>
+  </div>
+
+  <div class="row mt-3">
+    @for(project of projects(); track project.id) {
+      <div class="col-md-4 mb-3">
+        <div class="card" style="cursor:pointer" (click)="goToProject(project.id!)">
+          <div class="card-body">
+            <h5 class="card-title">{{ project.name }}</h5>
+            <p class="card-text">{{ project.description }}</p>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</div>
+
+@if(showCreateModal()) {
+  <div class="modal-backdrop" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:1040;" (click)="showCreateModal.set(false)"></div>
+  <div class="modal d-block" style="z-index:1050;" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h5 class="modal-title">Nouveau projet</h5>
+          <button type="button" class="btn-close" (click)="showCreateModal.set(false)"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">Nom</label>
+            <input type="text" class="form-control" [(ngModel)]="newProject.name" name="name">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Description</label>
+            <textarea class="form-control" [(ngModel)]="newProject.description" name="description"></textarea>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Date de début</label>
+            <input type="date" class="form-control" [(ngModel)]="newProject.startDate" name="startDate">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="showCreateModal.set(false)">Annuler</button>
+          <button type="button" class="btn btn-primary" (click)="createProject()">Créer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+}

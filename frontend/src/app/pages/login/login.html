@@ -1,0 +1,30 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Login</h5>
+                    <form (ngSubmit)="onSubmit()" class="">
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email address</label>
+                            <input type="email" class="form-control" id="email" name="email" [(ngModel)]="user.email">
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" name="password"
+                                [(ngModel)]="user.password">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+
+                        <div class="register-link">
+                            <a routerLink="/register">Créer un compte</a>
+                        </div>
+
+                        @if(isErrorMessage()) {
+                        <div class="container">
+                            <div class="alert alert-danger" role="alert">
+                                {{ errorMessage() }}
+                            </div>
+                        </div>
+                        }
+                    </form>
